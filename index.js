@@ -48,38 +48,33 @@ app.get("/customers/:customersId", function (req, res) {
     .catch((e) => console.error(e));
 });
 
-app.post("/hotels", function (req, res) {
-  const newHotelName = req.body.name;
-  const newHotelRooms = req.body.rooms;
-  const newHotelPostcode = req.body.postcode;
+app.post("/customers", function (req, res) {
+  const newCustomerName = req.body.name;
+  const newCustomerAddress = req.body.address;
+  const newCustomerCity = req.body.city;
 
-  if (!Number.isInteger(newHotelRooms) || newHotelRooms <= 0) {
-    return res
-      .status(400)
-      .send("The number of rooms should be a positive integer.");
-  }
-  if (newHotelName == 0 || newHotelName == "") {
+  if (newCustomerName == 0 || newCustomerName == "") {
     return res.status(400).send("Please name your Hotel!");
   }
-  if (newHotelRooms == 0 || newHotelRooms == "") {
-    return res.status(400).send("A hotel with 0 rooms?");
+  if (newCustomerAddress == 0 || newHotelRooms == "") {
+    return res.status(400).send("No address");
   }
   const query =
-    "INSERT INTO hotels (name, rooms, postcode) VALUES ($1, $2, $3)";
+    "INSERT INTO customers (name, address, city) VALUES ($1, $2, $3)";
 
   pool
-    .query("SELECT * FROM hotels WHERE name=$1", [newHotelName])
+    .query("SELECT * FROM customers WHERE name=$1", [newCustomerName])
     .then((result) => {
       if (result.rows.length > 0) {
         return res
           .status(400)
-          .send("An hotel with the same name already exists!");
+          .send("A customer with the same name already exists!");
       } else {
         const query =
-          "INSERT INTO hotels (name, rooms, postcode) VALUES ($1, $2, $3)";
+          "INSERT INTO customers (name, address, city) VALUES ($1, $2, $3)";
         pool
-          .query(query, [newHotelName, newHotelRooms, newHotelPostcode])
-          .then(() => res.send("Hotel created!"))
+          .query(query, [newCustomerName, newCustomerAddress, newCustomerCity])
+          .then(() => res.send("Customer created!"))
           .catch((e) => console.error(e));
       }
     });
