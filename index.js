@@ -80,11 +80,11 @@ app.post("/customers", function (req, res) {
     });
 });
 
-app.delete("/hotels/:hotelsId", function (req, res) {
-  const hotelsId = req.params.hotelsId;
+app.delete("/customers/:customersId", function (req, res) {
+  const customersId = req.params.customersId;
 
   pool
-    .query("DELETE FROM hotels WHERE id=$1", [hotelsId])
-    .then(() => res.send(`Hotel ${hotelsId} deleted!`))
-    .catch((e) => res.status(400).send("the hotel has bookings!"));
+    .query("DELETE FROM customers WHERE id=$1", [customersId])
+    .then(() => res.send(`Customer ${customersId} deleted!`))
+    .catch((e) => res.status(400).send("The customer can't be deleted!"));
 });
